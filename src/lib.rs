@@ -203,7 +203,6 @@ impl LedgerApp {
     #[cfg(target_os = "linux")]
     fn find_ledger_device_path(api: &hidapi::HidApi) -> Result<CString, Error> {
         for device in api.devices() {
-            println!("device {:?} ", device);
             if device.vendor_id == LEDGER_VID {
                 let usage_page = get_usage_page(&device.path)?;
                 if usage_page == LEDGER_USAGE_PAGE {
