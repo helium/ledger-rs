@@ -53,7 +53,8 @@ const LEDGER_USAGE_PAGE: u16 = 0xFFA0;
 const LEDGER_CHANNEL: u16 = 0x0101;
 // for Windows compatability, we prepend the buffer with a 0x00
 // so the actual buffer is 64 bytes
-const LEDGER_PACKET_SIZE: u8 = 65;
+const LEDGER_PACKET_WRITE_SIZE: u8 = 65;
+const LEDGER_PACKET_READ_SIZE: u8 = 64;
 
 const LEDGER_TIMEOUT: i32 = 10_000_000;
 
@@ -248,7 +249,7 @@ impl LedgerApp {
         in_data.push((command_length & 0xFF) as u8);
         in_data.extend_from_slice(&apdu_command);
 
-        let mut buffer = vec![0u8; LEDGER_PACKET_SIZE as usize];
+        let mut buffer = vec![0u8; LEDGER_PACKET_WRITE_SIZE as usize];
         // Windows platform requires 0x00 prefix and Linux/Mac tolerate this as well
         buffer[0] = 0x00;
         buffer[1] = ((channel >> 8) & 0xFF) as u8; // channel big endian
@@ -256,7 +257,7 @@ impl LedgerApp {
         buffer[3] = 0x05u8;
 
         for (sequence_idx, chunk) in in_data
-            .chunks((LEDGER_PACKET_SIZE - 6) as usize)
+            .chunks((LEDGER_PACKET_WRITE_SIZE - 6) as usize)
             .enumerate()
         {
             buffer[4] = ((sequence_idx >> 8) & 0xFF) as u8; // sequence_idx big endian
@@ -282,7 +283,7 @@ impl LedgerApp {
     }
 
     fn read_apdu(&self, channel: u16, apdu_answer: &mut Vec<u8>) -> Result<usize, Error> {
-        let mut buffer = vec![0u8; LEDGER_PACKET_SIZE as usize];
+        let mut buffer = vec![0u8; LEDGER_PACKET_READ_SIZE as usize];
         let mut sequence_idx = 0u16;
         let mut expected_apdu_len = 0usize;
 
