@@ -35,7 +35,7 @@ unsafe impl Sync for TransportTcp {}
 unsafe impl Send for TransportTcp {}
 
 impl TransportTcp {
-    async fn new() -> Result<Self, errors::LedgerTcpError> {
+    pub async fn new() -> Result<Self, errors::LedgerTcpError> {
         Ok(TransportTcp {
             stream: TcpStream::connect("127.0.0.1:9999")
                 .await
