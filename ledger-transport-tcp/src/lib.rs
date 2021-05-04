@@ -21,7 +21,7 @@ extern crate serial_test;
 
 mod errors;
 use byteorder::{BigEndian as BE, WriteBytesExt};
-use errors::LedgerTcpError;
+pub use errors::LedgerTcpError;
 use ledger_apdu::{APDUAnswer, APDUCommand};
 use std::result::Result;
 use tokio::io::AsyncWriteExt;
