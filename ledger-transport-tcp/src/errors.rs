@@ -38,4 +38,5 @@ impl LedgerTcpError {
     pub(crate) fn read_would_block() -> LedgerTcpError {
         LedgerTcpError::ReadWouldBlock
     }
+
 }

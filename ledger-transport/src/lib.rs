@@ -89,7 +89,8 @@ pub mod exchange {
     #[trait_async]
     impl Exchange for ledger_tcp::TransportTcp {
         async fn exchange(&self, command: &APDUCommand) -> Result<APDUAnswer, TransportError> {
-            self.exchange(command)
+            use ledger_tcp::TransportTcp;
+            TransportTcp::exchange(self, command)
                 .await
                 .map_err(|_| TransportError::APDUExchangeError)
         }
