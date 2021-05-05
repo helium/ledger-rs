@@ -32,8 +32,6 @@ ledger-apdu = { path = "../ledger-apdu", version = "0.7.0" }
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 ledger-transport-hid = { path = "../ledger-transport-hid", version = "0.7.0" }
 ledger-transport-tcp = { path = "../ledger-transport-tcp", version = "0.7.0" }
-ledger-transport-zemu = { path = "../ledger-transport-zemu", version = "0.7.0" }
-
 # For wasm compiling
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2"
