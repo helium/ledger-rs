@@ -26,21 +26,26 @@ use ledger_apdu::{APDUAnswer, APDUCommand};
 use std::result::Result;
 use tokio::io::AsyncWriteExt;
 use tokio::net::TcpStream;
+use std::net::SocketAddr;
 
-pub struct TransportTcp {}
+pub struct TransportTcp {
+    socket: SocketAddr
+}
 
 impl TransportTcp {
-    pub async fn new() -> Result<Self, errors::TransportTcpError> {
-        // test the connection but don't bother storing it
-        TcpStream::connect("127.0.0.1:9999")
+    pub async fn new(socket: SocketAddr) -> Result<Self, errors::TransportTcpError> {
+        // test the connection
+        TcpStream::connect(socket)
             .await
             .map_err(|_| TransportTcpError::connection_refused())?;
 
 
-        Ok(TransportTcp {})
+        Ok(TransportTcp {
+            socket
+        })
     }
     pub async fn exchange(&self, command: &APDUCommand) -> Result<APDUAnswer, TransportTcpError> {
-        let mut stream =         TcpStream::connect("127.0.0.1:9999")
+        let mut stream =         TcpStream::connect(self.socket)
             .await
             .map_err(|_| TransportTcpError::connection_refused())?;
         let payload = command.serialize();
